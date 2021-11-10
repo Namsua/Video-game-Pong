@@ -7,16 +7,8 @@ clock = pygame.time.Clock() #Kell. Et fps-i määrata. Saab ka arvutusi teha, ag
 
 ekraan = pygame.display.set_mode ((640, 480))
 pygame.display.set_caption("pong 9000")
-ekraan.fill((255,255,255))
 
 reket1 = pygame.Rect(0,170,10,100)
-pygame.draw.rect(ekraan, (0,0,0), reket1)
-
-reket2 = pygame.Rect(630,170,10,100)
-pygame.draw.rect(ekraan, (0,0,0), reket2)
-
-
-pygame.draw.circle(ekraan, (0,0,0), (310,220), 10)
 
 pygame.display.flip()
 
@@ -40,7 +32,8 @@ pygame.key.set_repeat(1, 3) #Paneb nupuvajutuse kordama. Parem oleks pygame.key.
     
 while True:
     clock.tick(100)
-    ekraan.fill((255,255,255)) #Ekraan tuleb iga kord uuendada, muidu parempoolne reket ei kustuta eelmisi kujutisi.
+    ekraan.fill((0,0,0)) #Ekraan tuleb iga kord uuendada, muidu parempoolne reket ei kustuta eelmisi kujutisi.
+    
     #vasak "reket"
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #saab akna kinni panna
@@ -60,11 +53,9 @@ while True:
                 for i in range(yrec1-10, yrec1+110):
                     yrec1lubatud.append(i)
                 reket1 = pygame.Rect(0,yrec1,10,100)
-    pygame.draw.rect(ekraan, (0,0,0), reket1)
-
+    pygame.draw.rect(ekraan, (255,255,255), reket1)
 
     #parem "reket"
-
     yrec2lubatud = []
     if x>300:   #hakkab liikuma alles siis, kui pall on oma poolel.
         #Kui pall on kõrgemal, liigub kõrgemale, kui madalamal, madalamale.
@@ -82,11 +73,11 @@ while True:
     for i in range(yrec2-10, yrec2+110):
         yrec2lubatud.append(i)
 
-
     reket2 = pygame.Rect(630, yrec2, 10, 100)
-    pygame.draw.rect(ekraan, (0,0,0), reket2)
+    pygame.draw.rect(ekraan, (255,255,255), reket2)
 
     pygame.time.wait(2)
+    
     pygame.draw.circle(ekraan, (255,255,255), (x,y), 10)
     #keral/pallil on viis liikumissuunda: 0 on üles+vasakule, 1 on alla+paremale, 2 on alla+vasakule, 3 on üles+paremale, 4 on algne
     if suund == 0:
@@ -156,23 +147,21 @@ while True:
             x = 310
             suund = 4
         
-    pygame.draw.circle(ekraan, (0,0,0), (x,y), 10)
+    pygame.draw.circle(ekraan, (255,255,255), (x,y), 10)
     meie_font = pygame.font.SysFont("Arial", 36)
-    tekstplayer = meie_font.render(str(skoorplayer), False, (255,0,0))
+    tekstplayer = meie_font.render(str(skoorplayer), False, (255,255,255))
     ekraan.blit(tekstplayer, (140, 10))
-    tekstAI = meie_font.render(str(skoorAI), False, (255,0,0))
+    tekstAI = meie_font.render(str(skoorAI), False, (255,255,255))
     ekraan.blit(tekstAI, (500, 10))
 
     if skoorplayer == 3 or skoorAI == 3:
-        
-            
-        uuesti = "Vajuta SPACE, et mängida uuesti "
-        uuesti2 = "või pane mäng tuimalt kinni. "
         font2 = pygame.font.SysFont("Arial", 24)
-        tekst1 = font2.render(uuesti, False, (255,0,0))
-        tekst2 = font2.render(uuesti2, False, (255,0,0))
-        ekraan.blit(tekst1, (180, 100))
-        ekraan.blit(tekst2, (180, 130))
+        uuesti = font2.render("Uuesti (SPACE)", False, (255,255,255))
+        uuesti_keskel = uuesti.get_rect(center=(640/2, 100))
+        välju = font2.render("Välju (ESC)", False, (255,255,255))
+        välju_keskel = välju.get_rect(center=(640/2, 120))
+        ekraan.blit(uuesti, uuesti_keskel)
+        ekraan.blit(välju, välju_keskel)
         pygame.draw.rect(ekraan, (255,255,255), reket1)
         yrec1 = 170
         reket1 = pygame.Rect(0,yrec1,10,100)
@@ -184,6 +173,11 @@ while True:
                 skoorplayer = 0
                 skoorAI = 0
                 yrec1lubatud = [240]
+            if event.type == pygame.QUIT: #saab akna kinni panna
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE: #et saaks iga kell välja ESC klahviga
+                    exit()
                 
                 
                 
