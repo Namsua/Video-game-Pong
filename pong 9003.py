@@ -20,12 +20,6 @@ pygame.draw.circle(ekraan, (0,0,0), (310,220), 10)
 
 pygame.display.flip()
 
-# Helid
-bump_sein = pygame.mixer.Sound('helid/bump_sein.wav')
-bump_reket = pygame.mixer.Sound('helid/bump_reket.wav')
-goal = pygame.mixer.Sound('helid/goal.wav')
-kaotus = pygame.mixer.Sound('helid/lose.wav')
-voit = pygame.mixer.Sound('helid/win.wav')
 
 yrec1 = 170     #vasaku reketi y koordinaat
 yrec2 = 170     #parema reketi y koordinaat
@@ -78,7 +72,6 @@ while True:
             yrec2 -= ai_kiirus
         elif yrec2<y:
             yrec2 += ai_kiirus
-
     else:
         if yrec2>170:
             yrec2 -= 1
@@ -101,77 +94,64 @@ while True:
         y -= palli_kiirus*r2ndom
         if x <= 20 and y in yrec1lubatud:
             suund = 3
-            bump_reket.play()
         elif x <= 20 and y not in yrec1lubatud:
-            goal.play()
             skoorAI += 1
             x = 310
             suund = 4
         if y <= 5:
             r2ndom = random.randrange(1, 3)
             suund = 2
-            bump_sein.play()
-
+            
     elif suund == 1:
         x += palli_kiirus*r2ndom2
         y += palli_kiirus*r2ndom
         if x >= 620 and y in yrec2lubatud:
             suund = 2
-            bump_reket.play()
         elif x >= 620 and y not in yrec2lubatud:
-            goal.play()
             skoorplayer += 1
             x = 310
             suund = 4
         if y <= 5:
             r2ndom = random.randrange(1, 3)
             suund = 2
-            bump_sein.play()
         if y >= 475:
             r2ndom = random.randrange(1, 3)
             suund = 3
-            bump_sein.play()
+            
 
     elif suund == 2:
         x -= palli_kiirus*r2ndom2
         y += palli_kiirus*r2ndom
         if x <= 20 and y in yrec1lubatud:
             suund = 1
-            bump_reket.play()
         elif x <= 20 and y not in yrec1lubatud:
-            goal.play()
             skoorAI += 1
             x = 310
             suund = 4
         if y >= 475:
             r2ndom = random.randrange(1, 3)
             suund = 0
-            bump_sein.play()
-
+            
     elif suund == 3:
         x += palli_kiirus*r2ndom2
         y -= palli_kiirus*r2ndom
         if x >= 610 and y in yrec2lubatud:
             suund = 0
-            bump_reket.play()
         elif x >= 610 and y not in yrec2lubatud:
-            goal.play()
             skoorplayer += 1
             x = 310
             suund = 4
         if y <= 5:
             r2ndom = random.randrange(1, 3)
             suund = 1
-            bump_sein.play()
-
+            
     elif suund == 4:
         x -= palli_kiirus 
         y = 240
         if x <= 20 and y in yrec1lubatud:
             suund = 1
-            bump_reket.play()
+            
         elif x <= 20 and y not in yrec1lubatud:
-            goal.play()
             skoorAI += 1
             x = 310
             suund = 4
@@ -184,11 +164,8 @@ while True:
     ekraan.blit(tekstAI, (500, 10))
 
     if skoorplayer == 3 or skoorAI == 3:
-        if skoorplayer == 3:
-            voit.play()
-        elif skoorAI == 3:
-            kaotus.play()
-
+        
+            
         uuesti = "Vajuta SPACE, et mängida uuesti "
         uuesti2 = "või pane mäng tuimalt kinni. "
         font2 = pygame.font.SysFont("Arial", 24)
