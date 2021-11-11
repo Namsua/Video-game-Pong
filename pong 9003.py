@@ -18,7 +18,7 @@ yrec2 = 170     #parema reketi y koordinaat
 x = 310         #palli x koordinaat
 y = 220         #pally y koordinaat
 palli_kiirus = 3
-ai_kiirus = 4
+ai_kiirus = 2
 player_kiirus = 4
 r2ndom = 1
 r2ndom2 = 3-r2ndom
@@ -27,7 +27,6 @@ yrec1lubatud = [240]       #see list on vajalik, et määrata vasaku reketi "mõ
 yrec2lubatud = []
 skoorplayer = 0
 skoorAI = 0
-paused = False
 
 pygame.key.set_repeat(1, 3) #Paneb nupuvajutuse kordama. Parem oleks pygame.key.get_pressed(), aga ei saanud tööle
 
@@ -39,6 +38,12 @@ def reset():
         skoorAI = 0
         global yrec1lubatud
         yrec1lubatud = [240]
+        global reket1
+        global yrec1
+        yrec1 = 170
+        reket1 = pygame.Rect(0,170,10,100)
+        pygame.draw.rect(ekraan, (255,255,255), reket1)
+        pygame.display.update()
     if event.key == pygame.QUIT: #saab akna kinni panna
         quit()
     if event.key == pygame.K_ESCAPE: #et saaks iga kell välja ESC klahviga
@@ -55,18 +60,26 @@ try:
                 reset()
                 if event.key == pygame.K_DOWN:
                     yrec1lubatud = []
-                    yrec1 +=player_kiirus
-                    for i in range(yrec1-10, yrec1+110):
-                        yrec1lubatud.append(i)
-                    reket1 = pygame.Rect(0,yrec1,10,100)
-                elif event.key == pygame.K_UP:
+                    if  yrec1 < 372:
+                        yrec1 +=player_kiirus
+                        for i in range(yrec1-10, yrec1+120):
+                            yrec1lubatud.append(i)
+                        reket1 = pygame.Rect(0,yrec1,10,100)
+                    else:
+                        yrec1 -= 5
+                
+                if event.key == pygame.K_UP:
                     yrec1lubatud = []
-                    yrec1 -= player_kiirus
-                    for i in range(yrec1-10, yrec1+110):
-                        yrec1lubatud.append(i)
-                    reket1 = pygame.Rect(0,yrec1,10,100)
+                    if yrec1 > 6:
+                        yrec1 -=player_kiirus
+                        for i in range(yrec1-10, yrec1+120):
+                            yrec1lubatud.append(i)
+                        reket1 = pygame.Rect(0,yrec1,10,100)
+                    else:
+                        yrec1 += 5
+                
+            
         pygame.draw.rect(ekraan, (255,255,255), reket1)
-
         #parem "reket"
         yrec2lubatud = []
         if x>300:   #hakkab liikuma alles siis, kui pall on oma poolel.
@@ -169,15 +182,11 @@ try:
             uuesti = font2.render("Uuesti (SPACE)", False, (255,255,255))
             uuesti_keskel = uuesti.get_rect(center=(640/2, 100))
             välju = font2.render("Välju (ESC)", False, (255,255,255))
-            välju_keskel = välju.get_rect(center=(640/2, 120))
+            välju_keskel = välju.get_rect(center=(640/2, 130))
             ekraan.blit(uuesti, uuesti_keskel)
             ekraan.blit(välju, välju_keskel)
-            pygame.draw.rect(ekraan, (255,255,255), reket1)
-            yrec1 = 170
-            reket1 = pygame.Rect(0,yrec1,10,100)
-            pygame.draw.rect(ekraan, (0,0,0), reket1)
             pygame.display.update()
-            while skoorplayer == 3 or skoorAI == 3:
+            if skoorplayer == 3 or skoorAI == 3:
                 event = pygame.event.wait()
                 if event.type == pygame.KEYDOWN:
                     reset()
